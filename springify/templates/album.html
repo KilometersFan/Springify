@@ -1,0 +1,73 @@
+{% extends 'form.html'%}
+<!DOCTYPE html>
+{% block header %}
+    <h1 class="h1">Your Albums</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th>
+            <div class="custom control custom-checkbox" style="visibility: hidden">
+                <input class="custom-control-input track" id="invisible" name="none" type="checkbox" value="none" disabled>
+                <label class="custom-control-label track_title" for="invisible"></label>
+            </div>
+        </th>
+        <th onclick="sortTable(0)">
+            <a href="#">
+                <h5>Album</h5>
+            </a>
+        </th>
+    </tr>
+    {% for item in total_albums %}
+        <tr>
+            <th scope="row">
+                <div class="custom control custom-checkbox">
+                    <input class="custom-control-input track" id="{{item[0]['album']['name']}}" name="album" type="checkbox" value="{{item[0]['album']['id']}}">
+                    <label class="custom-control-label track_title" for="{{item[0]['album']['name']}}"></label>
+                </div>
+            </th>
+            <td class="fit">
+                <div class="media">
+                    <div class="playlist_image" style="background-image: url('{{item[1]}}'); max-width: 64px; max-height: 64px;">
+                        <img src="{{item[1]}}" class="img-fluid">
+                    </div>
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{item[0]['album']['name']}}</p>
+                    </div>                        
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+{% block form_buttons %}
+    <button class="btn btn-primary" type="submit" name="submit" value="select">Remove Albums(s)</button>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#springify_form').attr('action', '/album/remove')
+        $('#springify_form').attr('name', 'album_list')
+    });
+</script>
+{% if error is not none and error|length %}
+<script>
+    $(document).ready(function(){
+        Swal.fire({
+            type: 'error',
+            title: 'Error',
+            text: '{{error | tojson}}'
+        })
+    })
+</script>
+{% endif %}
+    {% if msg is not none and msg|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'success',
+                    title: 'Success',
+                    text: '{{msg|tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="GET" id="springify_form" class="form_table mt-5 mx-4">
+    {% if '/springify/tracks' in request.path and request.path.endswith('/results')%}
+    <input type="text" id="search" class="form-control mb-4" onkeyup="searchList('true')" onkeydown="" placeholder="Search for playlists, tracks, names...">
+    {% else %}
+    <input type="text" id="search" class="form-control mb-4" onkeyup="searchList()" onkeydown="" placeholder="Search for playlists, tracks, names...">
+    {% endif %}
+    <table class="table table-striped table-fit table-hover" id="form-table">
+        <tbody id="tableBody">
+            {% block table_body %}
+            {% endblock %}
+        </tbody>
+    </table>
+    {% block options %}
+    {% endblock %}
+    <div id="empty"></div>
+    <div id="submit-group"class="btn-group btn-group-lg mb-5 mt-3" role="group">
+        {% block form_buttons %}
+        {% endblock %}
+    </div>
+</form>
+{% endblock %}
+{% block extra %}
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'form.html' %}
+{% block header %}
+    <h1 class="h1">{{name}}</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th>
+            <div class="custom control custom-checkbox" style="visibility: hidden">
+                <input class="custom-control-input track" id="invisible" name="track" type="checkbox" value="none" disabled>
+                <label class="custom-control-label track_title" for="invisible"></label>
+            </div>
+        </th>
+        <th onclick="sortTable(0)">
+            <a href="#">
+                <h5>Track</h5>
+            </a>
+        </th>
+    </tr>
+    {% for item in items%}
+        <tr>
+            <th scope="row">
+                <div class="custom control custom-checkbox">
+                    {% if item['track']['is_local']== False %}
+                    <input class="custom-control-input" id="{{item['track']['name']}}" name="track" type="checkbox" value="{{item['track']['id']}}">
+                    {% else %}
+                    <input class="custom-control-input" id="{{item['track']['name']}}" name="track" type="checkbox" value="{{item['track']['id']}}" disabled>
+                    {% endif %}
+                    <label class="custom-control-label track_title" for="{{item['track']['name']}}"></label>
+                </div>
+            </th>
+            <td class="fit">
+                <div class="media">
+                    {% if item['track']['is_local']== False %}
+                    <div class="playlist_image" style="background-image: url('{{item['track']['album']['images'][0]['url']}}'); max-width: 64px; max-height: 64px;">
+                        <img src="{{item['track']['album']['images'][0]['url']}}" class="img-fluid">
+                    </div>
+                    {% else %}
+                    <div>
+                        <svg width="64" height="64" viewBox="0 0 80 81" xmlns="http://www.w3.org/2000/svg">
+                            <title>Playlist Icon</title>
+                            <path d="M25.6 11.565v45.38c-2.643-3.27-6.68-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4 14.4-6.46 14.4-14.4v-51.82l48-10.205V47.2c-2.642-3.27-6.678-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4S80 64.17 80 56.23V0L25.6 11.565zm-11.2 65.61c-6.176 0-11.2-5.025-11.2-11.2 0-6.177 5.024-11.2 11.2-11.2 6.176 0 11.2 5.023 11.2 11.2 0 6.174-5.026 11.2-11.2 11.2zm51.2-9.745c-6.176 0-11.2-5.024-11.2-11.2 0-6.174 5.024-11.2 11.2-11.2 6.176 0 11.2 5.026 11.2 11.2 0 6.178-5.026 11.2-11.2 11.2z" fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    {% endif %} 
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{item['track']['name']}}</p>
+                    </div>                        
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+{% block options %}
+    <div class="custom control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" id="allInstances" name="allInstances" value="true">
+        <label class="custom-control-label track_title" for="allInstances">Remove from all playlists</label>
+    </div>
+    <div class="custom control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" id="unsave" name="unsave" value="true">
+        <label class="custom-control-label track_title" for="unsave">Remove from Library</label>
+    </div>
+{% endblock %}
+{% block form_buttons %}
+    <button class="btn btn-primary" type="submit" name="submit" value="delete">Delete Track(s)</button>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#springify_form').attr('action', '/tracks/remove/{{id}}/{{name}}')
+            $('#springify_form').attr('name', 'track_list')
+        });
+    </script>
+    {% if error is not none and error|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'error',
+                    title: 'Error',
+                    text: '{{error | tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+    {% if msg is not none and msg|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'success',
+                    title: 'Success',
+                    text: '{{msg|tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+{% endblock %}

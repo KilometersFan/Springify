@@ -1,0 +1,33 @@
+{% extends 'form.html'%}
+{% block header %}
+    <h1 class="h1">Your Playlists</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th onclick="sortTable(0)">
+            <a href="#">
+                <h5>Playlist</h5>
+            </a>
+        </th>
+    </tr>
+    {% for playlist in total_playlists %}
+        <tr>
+            <td class="fit">
+                {% if playlist[0]['owner']['id'] == user['id'] or playlist[0]['collaborative'] == True %}
+                <a href="/springify/tracks?submit=select&playlist_info={{playlist[0]['id']}},{{playlist[0]['name']}}">
+                {% else %}
+                <a href="#">
+                {% endif %}
+                    <div class="media">
+                        <div class="playlist_image" style="background-image: url('{{playlist[1]}}'); max-width: 64px; max-height: 64px;">
+                            <img src="{{playlist[1]}}" style="height: 64px">
+                        </div>
+                        <div class="media-body">
+                            <p class="media-label ml-4">{{playlist[0]['name']}}</p>
+                        </div>
+                    </div> 
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}

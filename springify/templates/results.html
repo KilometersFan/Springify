@@ -1,0 +1,91 @@
+{% extends "form.html" %}
+{% block header %}
+    <h1>Results</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th scope="col">
+            <div class="custom control custom-checkbox" style="visibility: hidden">
+                <input class="custom-control-input track" id="invisible" name="none" type="checkbox" value="none" disabled>
+                <label class="custom-control-label track_title" for="invisible"></label>
+            </div>
+        </th>
+        <th scope="col" onclick="sortTable(0)">
+            <a href="#">
+                <div class="media">
+                    <div class="media-body">
+                        <p class="media-label ml-4">Track</p>
+                    </div>                        
+                </div>
+            </a>
+        </th>
+        <th scope="col" onclick="sortTable(1)" style="float: right;">
+            <a href="#">
+                <div class="media">
+                    <div class="media-body">
+                        <p class="media-label ml-4">Difference</p>
+                    </div>                        
+                </div>
+            </a>
+        </th>
+    </tr>
+    {% for track_info in tracks%}
+        <tr>
+            <th scope="row">
+                <div class="custom control custom-checkbox">
+                    <input class="custom-control-input" id="{{track_info[0][0]}}" name="track" type="checkbox" value="{{track_info[0][0]}}">
+                    <label class="custom-control-label track_title" for="{{track_info[0][0]}}"></label>
+                </div>
+            </th>
+            <td class="fit">
+                <div class="media">
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{track_info[0][1]}}</p>
+                    </div>                        
+                </div>
+            </td>
+            <td class="fit">
+                <div class="media">
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{track_info[1]}}</p>
+                    </div>                        
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+{% block form_buttons %}
+<button class="btn btn-primary" type="submit" name="submit" value="delete">Remove Tracks</button>
+<button class="btn btn-primary" type="submit" name="submit" value="back">Choose Other Playlist</button>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#springify_form').attr('action', '/springify/tracks/{{playlist_id}}/{{name}}/remove')
+        $('#springify_form').attr('name', 'track_list')
+    });
+</script>
+{% if error is not none and error|length %}
+<script>
+    $(document).ready(function(){
+        Swal.fire({
+            type: 'error',
+            title: 'Error',
+            text: '{{error | tojson}}'
+        })
+    })
+</script>
+{% endif %}
+{% if msg is not none and msg|length %}
+<script>
+    console.log('Trying to remove track')
+    $(document).ready(function(){
+        Swal.fire({
+            type: 'success',
+            title: 'Success',
+            text: '{{msg|tojson}}'
+        })
+    })
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'form.html' %}
+{% block title %}
+    - Your Playlists
+{% endblock %}
+{% block header %}
+<h1 class="h1">Your Playlists</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th>
+            <div class="custom control custom-checkbox" style="visibility: hidden">
+                <input class="custom-control-input track" id="invisible" name="none" type="checkbox" value="none" disabled>
+                <label class="custom-control-label track_title" for="invisible"></label>
+            </div>
+        </th>
+        <th onclick="sortTable(0)">
+            <a href="#">
+                <h5>Playlist</h5>
+            </a>
+        </th>
+    </tr>
+    {% for playlist in total_playlists %}
+        <tr>
+            <th scope="row">
+                <div class="custom control custom-checkbox">
+                    {% if playlist[0]['owner']['id'] == user['id'] or playlist[0]['collaborative'] == True%}
+                    <input name="playlist" id="{{playlist[0]['name']}}" class="custom-control-input" type="checkbox" value="{{playlist[0]['id']}}">
+                    {% else %}
+                    <input name="playlist" id="{{playlist[0]['name']}}" class="custom-control-input" type="checkbox" value="{{playlist[0]['id']}}" disabled>
+                    {% endif %}
+                    <label for="{{playlist[0]['name']}}" class="custom-control-label track_title"></label>
+                </div>
+            </th>
+            <td class="fit align-middle">
+                <div class="media">
+                    <div class="playlist_image" style="background-image: url('{{playlist[1]}}'); max-width: 64px; max-height: 64px;">
+                        <img src="{{playlist[1]}}" class="img-fluid">
+                    </div>
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{playlist[0]['name']}}</p>
+                    </div>                        
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block form_buttons %}
+    <button class="btn btn-primary" type="submit" id="submit" name="submit" value="delete">Delete Playlists</button>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#springify_form').attr('action', '/delete_playlists/delete')
+        $('#springify_form').attr('name', 'playlist_list')
+    });
+</script>
+{% if error is not none and error|length %}
+<script>
+    $(document).ready(function(){
+        Swal.fire({
+            type: 'error',
+            title: 'Error',
+            text: '{{error | tojson}}'
+        })
+    })
+</script>
+{% endif %}
+    {% if msg is not none and msg|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'success',
+                    title: 'Success',
+                    text: '{{msg|tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+{% endblock %}

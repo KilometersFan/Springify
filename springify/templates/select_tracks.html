@@ -1,0 +1,182 @@
+{% extends 'form.html' %}
+{% block header %}
+    <h1>{{name}}</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th>
+            <div class="custom control custom-checkbox" style="visibility: hidden">
+                <input class="custom-control-input track" id="invisible" name="none" type="checkbox" value="none" disabled>
+                <label class="custom-control-label track_title" for="invisible"></label>
+            </div>
+        </th>
+        <th onclick="sortTable(0)">
+            <a href="#">
+                <h5>Track</h5>
+            </a>
+        </th>
+    </tr>
+    {% for item in items%}
+        <tr>
+            <th scope="row">
+                <div class="custom control custom-checkbox">
+                    {% if item['track']['is_local']== False %}
+                    <input class="custom-control-input track" id="{{item['track']['id']}}" name="track" type="checkbox" value="{{item['track']['id']}}">
+                    {% else %}
+                    <input class="custom-control-input track" id="{{item['track']['id']}}" name="track" type="checkbox" value="{{item['track']['id']}}" disabled>
+                    {% endif %}
+                    <label class="custom-control-label track_title" for="{{item['track']['id']}}"></label>
+                </div>
+            </th>
+            <td class="fit">
+                <div class="media">
+                    {% if item['track']['is_local']== False %}
+                    <div class="playlist_image" style="background-image: url('{{item['track']['album']['images'][0]['url']}}'); max-width: 64px; max-height: 64px;">
+                        <img src="{{item['track']['album']['images'][0]['url']}}" class="img-fluid">
+                    </div>
+                    {% else %}
+                    <div>
+                        <svg width="64" height="64" viewBox="0 0 80 81" xmlns="http://www.w3.org/2000/svg">
+                            <title>Playlist Icon</title>
+                            <path d="M25.6 11.565v45.38c-2.643-3.27-6.68-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4 14.4-6.46 14.4-14.4v-51.82l48-10.205V47.2c-2.642-3.27-6.678-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4S80 64.17 80 56.23V0L25.6 11.565zm-11.2 65.61c-6.176 0-11.2-5.025-11.2-11.2 0-6.177 5.024-11.2 11.2-11.2 6.176 0 11.2 5.023 11.2 11.2 0 6.174-5.026 11.2-11.2 11.2zm51.2-9.745c-6.176 0-11.2-5.024-11.2-11.2 0-6.174 5.024-11.2 11.2-11.2 6.176 0 11.2 5.026 11.2 11.2 0 6.178-5.026 11.2-11.2 11.2z" fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    {% endif %}
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{item['track']['name']}}</p>
+                    </div>                        
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+{% block form_buttons %}
+    <button class="btn btn-primary" id="springify_select" type="submit" name="submit" value="select">Select Track(s)</button>
+{% endblock %}
+{% block options %}
+    <h2>Features to Ignore</h2>
+    <div id="args" class="card">
+        <div class="card-body">
+            <div class="card-text">
+                <h6>Selecting any of these features will reduce the impact of the difference between the chosen tracks and the remaining when calculating similarity</h6>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="acousticness" name="feature" value="True">
+                    <label class="custom-control-label" for="acousticness"></label>
+                    <div class="media-body ml-2">
+                        Acousticness
+                    </div>
+                </div>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="danceability" name="feature" value="True">
+                    <label class="custom-control-label" for="danceability"></label>
+                    <div class="media-body ml-2">
+                        Danceability
+                    </div>
+                </div>
+            </div>  
+            <div class="card-text custom control custom-checkbox mb-1"> 
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="energy" name="feature" value="True">
+                    <label class="custom-control-label" for="energy"></label>
+                    <div class="media-body ml-2">
+                        Energy
+                    </div>
+                </div>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="instrumentalness" name="feature" value="True">    
+                    <label class="custom-control-label" for="instrumentalness"></label>
+                    <div class="media-body ml-2">
+                        Instrumentalness
+                    </div>
+                </div>
+            </div>  
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="liveness" name="liveness" value="True">
+                    <label class="custom-control-label" for="liveness"></label>
+                    <div class="media-body ml-2">
+                        Liveness
+                    </div>
+                </div>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="loudness" name="feature" value="True">
+                    <label class="custom-control-label" for="loudness"></label>
+                    <div class="media-body ml-2">
+                        Loudness
+                    </div>
+                </div>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="speechiness" name="feature" value="True">
+                    <label class="custom-control-label" for="speechiness"></label>
+                    <div class="media-body ml-2">
+                        Speechiness
+                    </div>
+                </div>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="tempo" name="feature" value="True">
+                    <label class="custom-control-label" for="tempo"></label>
+                    <div class="media-body ml-2">
+                        Tempo
+                    </div>
+                </div>
+            </div>
+            <div class="card-text custom control custom-checkbox mb-1">
+                <div class="media">
+                    <input class="custom-control-input" type="checkbox" id="valence" name="feature" value="True">
+                    <label class="custom-control-label" for="valence"></label>
+                    <div class="media-body ml-2">
+                        Valence
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        var tracks = []
+        $("input:checkbox[name=track]:checked").each(function(){
+            console.log(tracks)
+        });
+        $(".track").on('change',function(){
+            if($(".track:checked").length > 5){
+                this.checked = false;
+            }
+            tracks = [];
+            $.each($(".track:checked"), function(){            
+                tracks.push($(this).val());
+            });
+            $("#selected_items").text(tracks.join(', '))
+            console.log(tracks)
+        });
+        $(document).ready(function(){
+            console.log('/springify/tracks/{{id}}/{{name}}')
+            $('#springify_form').attr('action', '/springify/tracks/{{id}}/{{name}}/results')
+            $('#springify_form').attr('name', 'playlist_list')
+        });
+    </script>
+    {% if error is not none and error|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'error',
+                    title: 'Error',
+                    text: '{{error|tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>Springify{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='base.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    {% endblock %}
+</head>
+<body>
+    <div class="main container-fluid bg-light text-dark">
+        <div class="welcome">
+            <h1 class="h1 mt-4 mx-3">Welcome to Springify!</h1>
+            <form method="GET" action="/home" class="mt-4 mx-3">
+                <button class="btn btn-primary" type="submit" name="submit" value="Submit">Enter Springify!</button>
+            </form>
+        </div>
+    </div>
+</body>
+{% if msg is not none and msg|length %}
+    <script>
+        console.log("HELLO")
+        $(document).ready(function(){
+            Swal.fire({
+                type: 'success',
+                title: 'Success',
+                text: '{{msg|tojson}}'
+            })
+        })
+    </script>
+{% endif %}
+</html>

@@ -1,0 +1,75 @@
+{% extends 'form.html' %}
+{% block title %}
+    - Your Followed Accounts
+{% endblock %}
+{% block header %}
+<h1 class="h1">Your Followed Accounts</h1>
+{% endblock %}
+{% block table_body %}
+    <tr>
+        <th>
+            <div class="custom control custom-checkbox" style="visibility: hidden">
+                <input class="custom-control-input track" id="invisible" name="none" type="checkbox" value="none" disabled>
+                <label class="custom-control-label track_title" for="invisible"></label>
+            </div>
+        </th>
+        <th onclick="sortTable(0)">
+            <a href="#">
+                <h5>Account</h5>
+            </a>
+        </th>
+    </tr>
+    {% for account in following %}
+        <tr>
+            <th scope="row">
+                <div class="custom control custom-checkbox">  
+                    <input class="custom-control-input" id="{{account['name']}}" name="account" type="checkbox" value="{{account['id']}}">
+                    <label class="custom-control-label track_title" for="{{account['name']}}"></label>
+                </div>
+            </th>
+            <td class="fit align-middle">
+                <div class="media">
+                    <div class="playlist_image" style="background-image: url('{{account['images'][0]['url']}}'); max-width: 64px; max-height: 64px;">
+                        <img src="{{account['images'][0]['url']}}">
+                    </div>
+                    <div class="media-body">
+                        <p class="media-label ml-4">{{account['name']}}</p>
+                    </div>                        
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+{% block form_buttons %}
+    <button class="btn btn-primary" type="submit" name="submit" value="unfollow">Unfollow</button>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#springify_form').attr('action', '/accounts/unfollow')
+            $('#springify_form').attr('name', 'track_list')
+        });
+    </script>
+    {% if error is not none and error|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'error',
+                    title: 'Error',
+                    text: '{{error | tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+    {% if msg is not none and msg|length %}
+        <script>
+            $(document).ready(function(){
+                Swal.fire({
+                    type: 'success',
+                    title: 'Success',
+                    text: '{{msg|tojson}}'
+                })
+            })
+        </script>
+    {% endif %}
+{% endblock %}
